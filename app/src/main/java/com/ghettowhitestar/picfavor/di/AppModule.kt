@@ -4,10 +4,10 @@ import android.app.Service
 import android.content.Context
 import android.net.ConnectivityManager
 import androidx.room.Room
-import com.ghettowhitestar.picfavor.api.PicsumApi
-import com.ghettowhitestar.picfavor.db.AppDatabase
-import com.ghettowhitestar.picfavor.db.LikedPhotoDao
-import com.ghettowhitestar.picfavor.source.CacheManager
+import com.ghettowhitestar.picfavor.data.remote.PicsumApi
+import com.ghettowhitestar.picfavor.data.local.AppDatabase
+import com.ghettowhitestar.picfavor.data.local.LikedPhotoDao
+import com.ghettowhitestar.picfavor.domain.FileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -64,6 +64,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCacheManager() = CacheManager()
+    fun provideCacheManager() = FileRepository()
 
 }

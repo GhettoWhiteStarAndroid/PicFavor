@@ -1,9 +1,9 @@
-package com.ghettowhitestar.picfavor.ui
+package com.ghettowhitestar.picfavor.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.ghettowhitestar.picfavor.R
-import com.ghettowhitestar.picfavor.ui.viewpager.SectionsPagerAdapter
+import com.ghettowhitestar.picfavor.presentation.viewpager.SectionsPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*

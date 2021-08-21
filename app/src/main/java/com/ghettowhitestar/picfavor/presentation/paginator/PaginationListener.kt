@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.paginator
+package com.ghettowhitestar.picfavor.presentation.paginator
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

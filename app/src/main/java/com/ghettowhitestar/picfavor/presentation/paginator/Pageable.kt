@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.paginator
+package com.ghettowhitestar.picfavor.presentation.paginator
 
 /** Интерфейс, который должны реализовывать классы, способные на пагинацию */
 

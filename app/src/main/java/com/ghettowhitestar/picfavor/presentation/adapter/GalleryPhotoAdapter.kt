@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.ui.adapter
+package com.ghettowhitestar.picfavor.presentation.adapter
 
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable

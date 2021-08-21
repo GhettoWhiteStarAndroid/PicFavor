@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.ui.like
+package com.ghettowhitestar.picfavor.presentation.like
 
 import android.os.Bundle
 import android.view.View
@@ -6,8 +6,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ghettowhitestar.picfavor.R
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
-import com.ghettowhitestar.picfavor.ui.adapter.GalleryPhotoAdapter
-import com.ghettowhitestar.picfavor.vm.PhotoViewModel
+import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
+import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 
 /**Фрагмент отображающий понравившиеся фотографии*/
 class LikesFragment : Fragment(R.layout.fragment_layout) {

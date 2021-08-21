@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.vm
+package com.ghettowhitestar.picfavor.presentation
 
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
@@ -7,8 +7,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
-import com.ghettowhitestar.picfavor.paginator.Pageable
-import com.ghettowhitestar.picfavor.repo.PhotoRepository
+import com.ghettowhitestar.picfavor.presentation.paginator.Pageable
+import com.ghettowhitestar.picfavor.domain.PhotoRepository
 import com.ghettowhitestar.picfavor.utils.add
 import com.ghettowhitestar.picfavor.utils.delete
 import io.reactivex.Single

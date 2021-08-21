@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.source
+package com.ghettowhitestar.picfavor.domain
 
 import android.graphics.Bitmap
 import android.os.Environment
@@ -7,7 +7,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 
-class CacheManager {
+class FileRepository {
     /**
      * Удаление фотографии из памяти телефона
      * @ path путь к сохраненной фотографии

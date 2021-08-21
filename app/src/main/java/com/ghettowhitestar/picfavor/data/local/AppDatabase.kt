@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.db
+package com.ghettowhitestar.picfavor.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

@@ -1,6 +1,6 @@
 package com.ghettowhitestar.picfavor
 
-import com.ghettowhitestar.picfavor.api.PicsumApi
+import com.ghettowhitestar.picfavor.data.remote.PicsumApi
 import org.junit.Assert
 import org.junit.Test
 

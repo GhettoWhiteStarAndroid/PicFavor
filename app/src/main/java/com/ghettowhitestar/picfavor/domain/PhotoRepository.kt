@@ -1,11 +1,10 @@
-package com.ghettowhitestar.picfavor.repo
+package com.ghettowhitestar.picfavor.domain
 
 import android.graphics.Bitmap
 import android.net.ConnectivityManager
-import com.ghettowhitestar.picfavor.api.PicsumApi
+import com.ghettowhitestar.picfavor.data.remote.PicsumApi
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
-import com.ghettowhitestar.picfavor.db.LikedPhotoDao
-import com.ghettowhitestar.picfavor.source.CacheManager
+import com.ghettowhitestar.picfavor.data.local.LikedPhotoDao
 
 
 import javax.inject.Inject
@@ -16,7 +15,7 @@ class PhotoRepository @Inject constructor(
     private val picsumApi: PicsumApi,
     private val likedPhotoDao: LikedPhotoDao,
     private val connectivityManager: ConnectivityManager,
-    private val cacheManager: CacheManager
+    private val fileRepository: FileRepository
 ) {
 
     fun getGalleryPhotosResult(pageSize: Int, currentPage: Int) =
@@ -33,7 +32,7 @@ class PhotoRepository @Inject constructor(
 
     fun isNetworkAvailable() = connectivityManager.activeNetwork == null
 
-    fun saveImage(image: Bitmap, photo: PicsumPhoto) = cacheManager.saveImage(image, photo)
+    fun saveImage(image: Bitmap, photo: PicsumPhoto) = fileRepository.saveImage(image, photo)
 
-    fun deleteImage(path: String) = cacheManager.deleteImage(path)
+    fun deleteImage(path: String) = fileRepository.deleteImage(path)
 }

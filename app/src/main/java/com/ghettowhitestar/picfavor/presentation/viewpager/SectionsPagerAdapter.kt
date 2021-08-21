@@ -1,10 +1,10 @@
-package com.ghettowhitestar.picfavor.ui.viewpager
+package com.ghettowhitestar.picfavor.presentation.viewpager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.ghettowhitestar.picfavor.ui.gallery.GalleryFragment
-import com.ghettowhitestar.picfavor.ui.like.LikesFragment
+import com.ghettowhitestar.picfavor.presentation.gallery.GalleryFragment
+import com.ghettowhitestar.picfavor.presentation.like.LikesFragment
 import java.lang.IllegalStateException
 
 

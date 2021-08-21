@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.ui.gallery
+package com.ghettowhitestar.picfavor.presentation.gallery
 
 import android.content.Context
 import android.os.Bundle
@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ghettowhitestar.picfavor.R
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
-import com.ghettowhitestar.picfavor.vm.PhotoViewModel
-import com.ghettowhitestar.picfavor.ui.adapter.GalleryPhotoAdapter
-import com.ghettowhitestar.picfavor.paginator.PaginationListener
+import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
+import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
+import com.ghettowhitestar.picfavor.presentation.paginator.PaginationListener
 import dagger.hilt.android.AndroidEntryPoint
 
 /** Фрагмент отвечающий за отображение случайных фотографий */

@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.db
+package com.ghettowhitestar.picfavor.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete

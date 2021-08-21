@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.api
+package com.ghettowhitestar.picfavor.data.remote
 
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
 import io.reactivex.Single

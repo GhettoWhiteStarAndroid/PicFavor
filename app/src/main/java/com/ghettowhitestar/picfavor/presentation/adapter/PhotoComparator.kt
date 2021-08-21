@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.ui.adapter
+package com.ghettowhitestar.picfavor.presentation.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
