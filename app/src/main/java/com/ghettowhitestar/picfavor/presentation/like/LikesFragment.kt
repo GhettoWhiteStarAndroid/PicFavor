@@ -1,37 +1,29 @@
 package com.ghettowhitestar.picfavor.presentation.like
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ghettowhitestar.picfavor.R
+import com.ghettowhitestar.picfavor.core.BaseFragment
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
 import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
 import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 
-/**Фрагмент отображающий понравившиеся фотографии*/
-class LikesFragment : Fragment(R.layout.fragment_layout) {
+class LikesFragment : BaseFragment() {
 
     private val viewModel: PhotoViewModel by activityViewModels()
-    private lateinit var binding: FragmentLayoutBinding
     private lateinit var adapter: GalleryPhotoAdapter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentLayoutBinding.bind(view)
-
+    override fun FragmentLayoutBinding.initView() {
         adapter = GalleryPhotoAdapter { photo, bitmap -> viewModel.changeLikePhoto(photo, bitmap) }
 
         binding.apply {
             recyclerView.adapter = adapter
             buttonRetry.setOnClickListener { }
         }
-
-        /**
-         * Слушаем изменение в списке лайкнутых фотографий
-         * Обновляем список при изменении
-         */
         viewModel.likedPhotoList.observe(viewLifecycleOwner, {
             it.let { items ->
                 isLikeListEmpty(it.isEmpty())
@@ -40,12 +32,13 @@ class LikesFragment : Fragment(R.layout.fragment_layout) {
         })
     }
 
-    /** Показывает сообщение, если нет лайкнутых картинок */
-    private fun isLikeListEmpty(isEmpty: Boolean) {
+    private fun FragmentLayoutBinding.isLikeListEmpty(isEmpty: Boolean) {
         if (isEmpty) {
-            binding.textViewError.visibility = View.VISIBLE
+            textViewError.visibility = View.VISIBLE
         } else {
-            binding.textViewError.visibility = View.GONE
+            textViewError.visibility = View.GONE
         }
     }
+
+
 }
