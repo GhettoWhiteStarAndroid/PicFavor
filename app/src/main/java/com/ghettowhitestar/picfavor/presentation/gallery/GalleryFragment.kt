@@ -1,17 +1,12 @@
 package com.ghettowhitestar.picfavor.presentation.gallery
 
-import android.content.Context
-import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.ghettowhitestar.picfavor.R
 import com.ghettowhitestar.picfavor.core.BaseFragment
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
 import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
+import com.ghettowhitestar.picfavor.presentation.VisibilityStates
 import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
 import com.ghettowhitestar.picfavor.presentation.paginator.PaginationListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,9 +27,7 @@ class GalleryFragment : BaseFragment() {
         recyclerView.addOnScrollListener(PaginationListener(viewModel))
         recyclerView.adapter = adapter
         buttonRetry.setOnClickListener {
-            progressBar.visibility = View.VISIBLE
-            textViewError.visibility = View.GONE
-            buttonRetry.visibility = View.GONE
+            layoutState(VisibilityStates.Loading)
             /*viewModel.checkNetworkConnection()*/
         }
 
@@ -46,18 +39,7 @@ class GalleryFragment : BaseFragment() {
         })
 
         viewModel.isStartNetwork.observe(viewLifecycleOwner, {
-            isGalleryEmpty(it)
+            layoutState(if(it) VisibilityStates.Retry else VisibilityStates.Visible)
         })
-    }
-
-    private fun FragmentLayoutBinding.isGalleryEmpty(isNetwork: Boolean) {
-        if (isNetwork) {
-            progressBar.visibility = View.GONE
-            textViewError.visibility = View.VISIBLE
-            buttonRetry.visibility = View.VISIBLE
-        } else {
-            textViewError.visibility = View.GONE
-            buttonRetry.visibility = View.GONE
-        }
     }
 }

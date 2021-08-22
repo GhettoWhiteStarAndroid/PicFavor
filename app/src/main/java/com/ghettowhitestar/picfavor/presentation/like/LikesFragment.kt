@@ -11,6 +11,7 @@ import com.ghettowhitestar.picfavor.core.BaseFragment
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
 import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
 import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
+import com.ghettowhitestar.picfavor.presentation.VisibilityStates
 
 class LikesFragment : BaseFragment() {
 
@@ -26,19 +27,9 @@ class LikesFragment : BaseFragment() {
         }
         viewModel.likedPhotoList.observe(viewLifecycleOwner, {
             it.let { items ->
-                isLikeListEmpty(it.isEmpty())
+                layoutState(if (it.isEmpty()) VisibilityStates.Empty else VisibilityStates.Visible)
                 adapter.updateItems(items)
             }
         })
     }
-
-    private fun FragmentLayoutBinding.isLikeListEmpty(isEmpty: Boolean) {
-        if (isEmpty) {
-            textViewError.visibility = View.VISIBLE
-        } else {
-            textViewError.visibility = View.GONE
-        }
-    }
-
-
 }

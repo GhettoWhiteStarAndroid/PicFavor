@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
+import com.ghettowhitestar.picfavor.presentation.VisibilityStates
 
 abstract class BaseFragment : Fragment() {
 
@@ -25,5 +26,27 @@ abstract class BaseFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.initView()
+    }
+
+    fun FragmentLayoutBinding.layoutState(state: VisibilityStates) {
+        when (state){
+            VisibilityStates.Loading -> {
+                progressBar.visibility = View.VISIBLE
+                textViewError.visibility = View.GONE
+                buttonRetry.visibility = View.GONE
+            }
+            VisibilityStates.Retry -> {
+                progressBar.visibility = View.GONE
+                textViewError.visibility = View.VISIBLE
+                buttonRetry.visibility = View.VISIBLE
+            }
+            VisibilityStates.Visible -> {
+                textViewError.visibility = View.GONE
+                buttonRetry.visibility = View.GONE
+            }
+            VisibilityStates.Empty -> {
+                textViewError.visibility = View.VISIBLE
+            }
+        }
     }
 }
