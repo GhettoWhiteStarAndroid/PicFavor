@@ -1,4 +1,4 @@
-package com.ghettowhitestar.picfavor.domain
+package com.ghettowhitestar.picfavor.data.repositories.files
 
 import android.graphics.Bitmap
 import android.os.Environment
@@ -6,13 +6,14 @@ import com.ghettowhitestar.picfavor.data.PicsumPhoto
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import javax.inject.Inject
 
-class FileRepository {
+class FileStorageRepository @Inject constructor() : FileRepository {
     /**
      * Удаление фотографии из памяти телефона
      * @ path путь к сохраненной фотографии
      */
-    fun deleteImage(path: String) {
+    override fun deleteImage(path: String) {
         val storageDir = File(
             Environment.getExternalStorageDirectory()
                 .toString() + "/DCIM"
@@ -24,7 +25,7 @@ class FileRepository {
     }
 
     /** Сохранение фотографии на телефоне */
-    fun saveImage(image: Bitmap, photo: PicsumPhoto) {
+    override fun saveImage(image: Bitmap, photo: PicsumPhoto) {
         val storageDir = File(
             Environment.getExternalStorageDirectory()
                 .toString() + "/DCIM"

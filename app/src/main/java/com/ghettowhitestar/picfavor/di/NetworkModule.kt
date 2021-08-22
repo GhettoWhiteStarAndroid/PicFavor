@@ -3,25 +3,19 @@ package com.ghettowhitestar.picfavor.di
 import android.app.Service
 import android.content.Context
 import android.net.ConnectivityManager
-import androidx.room.Room
 import com.ghettowhitestar.picfavor.data.remote.PicsumApi
-import com.ghettowhitestar.picfavor.data.local.AppDatabase
-import com.ghettowhitestar.picfavor.data.local.LikedPhotoDao
-import com.ghettowhitestar.picfavor.domain.FileRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
-/**Основной DI модуль приложения*/
 @Module
-@InstallIn(ApplicationComponent::class)
-object AppModule {
+@InstallIn(SingletonComponent::class)
+class NetworkModule {
 
     @Provides
     @Singleton
@@ -29,9 +23,8 @@ object AppModule {
         Retrofit.Builder()
             .baseUrl(PicsumApi.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
-
+    
     @Provides
     @Singleton
     fun checkNetwork(@ApplicationContext appContext: Context): ConnectivityManager {
@@ -45,25 +38,5 @@ object AppModule {
     @Singleton
     fun providePicsumApi(retrofit: Retrofit): PicsumApi =
         retrofit.create(PicsumApi::class.java)
-
-    @Provides
-    @Singleton
-    fun provideLikedPhotoDao(appDatabase: AppDatabase): LikedPhotoDao {
-        return appDatabase.likedPhotoDao()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAppDatabase(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            "picsum"
-        ).build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideCacheManager() = FileRepository()
 
 }

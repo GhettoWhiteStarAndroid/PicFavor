@@ -37,7 +37,7 @@ class GalleryFragment : Fragment(R.layout.fragment_layout) {
                 progressBar.visibility = View.VISIBLE
                 binding.textViewError.visibility = View.GONE
                 binding.buttonRetry.visibility = View.GONE
-                viewModel.checkNetworkConnection()
+                /*viewModel.checkNetworkConnection()*/
             }
         }
         /**

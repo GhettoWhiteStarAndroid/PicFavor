@@ -14,7 +14,7 @@ interface LikedPhotoDao {
 
     /**Получение всех понравившихся фотографий*/
     @Query("SELECT * FROM PicsumPhoto")
-    fun getAllLikedPhotos(): Single<List<PicsumPhoto>>
+    fun getAllLikedPhotos(): List<PicsumPhoto>
 
     /**Добавление понравившейся фотографии*/
     @Insert

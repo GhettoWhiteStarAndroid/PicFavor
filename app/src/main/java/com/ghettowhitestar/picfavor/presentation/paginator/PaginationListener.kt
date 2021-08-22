@@ -2,6 +2,7 @@ package com.ghettowhitestar.picfavor.presentation.paginator
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.ghettowhitestar.picfavor.utils.Constants.PAGE_SIZE
 
 /**
  * Слушатель прокрутки списка для пагинации
@@ -27,7 +28,7 @@ class PaginationListener(
             pageableCallback.hasMore &&
             (visibleItemCount + firstVisibleItemPosition) >= totalItemCount &&
             firstVisibleItemPosition >= 0 &&
-            totalItemCount >= pageableCallback.pageSize
+            totalItemCount >= PAGE_SIZE
         ) {
             pageableCallback.loadNextPage()
         }
