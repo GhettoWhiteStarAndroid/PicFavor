@@ -18,34 +18,26 @@ import com.ghettowhitestar.picfavor.databinding.ItemPhotoBinding
  * @property listenerLike лямбда на метод в viewmodel при изменении лайка
  */
 class GalleryPhotoAdapter(
+    private var items: List<PicsumPhoto> = mutableListOf(),
     private val listenerLike: (PicsumPhoto, Bitmap) -> Unit
 ) :
-    ListAdapter<PicsumPhoto, GalleryPhotoAdapter.PhotoViewHolder>(PhotoDiff) {
-
-    object PhotoDiff: DiffUtil.ItemCallback<PicsumPhoto>(){
-        override fun areContentsTheSame(oldItem: PicsumPhoto, newItem: PicsumPhoto): Boolean {
-            return oldItem == newItem
-        }
-        override fun areItemsTheSame(oldItem: PicsumPhoto, newItem: PicsumPhoto): Boolean {
-            return if( oldItem.id == newItem.id)
-           {
-               oldItem.isLikedPhoto == newItem.isLikedPhoto
-           }else{
-               false
-           }
-        }
-    }
+    RecyclerView.Adapter<GalleryPhotoAdapter.PhotoViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding = ItemPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhotoViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        holder.bind(currentList[position], listenerLike)
+    fun updateItems(items: MutableList<PicsumPhoto>) {
+        this.items = items
+        notifyDataSetChanged()
     }
 
-    override fun getItemCount(): Int = currentList.size
+    override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
+        holder.bind(items[position], listenerLike)
+    }
+
+    override fun getItemCount(): Int =items.size
 
     class PhotoViewHolder(private val binding: ItemPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -60,10 +52,8 @@ class GalleryPhotoAdapter(
                     .into(pictureImage)
 
                 textViewUserName.text = photo.author
-                setLikeImage(photo.isLikedPhoto)
-                pictureImage.tag = photo.downloadUrl
+                binding.likeButton.setImageResource(setLikeImage(photo.isLikedPhoto))
                 likeButton.setOnClickListener {
-                 setLikeImage(!photo.isLikedPhoto)
                     val bitmap = (pictureImage.drawable as BitmapDrawable).bitmap
                     listenerLike(photo, bitmap)
                 }
@@ -71,11 +61,10 @@ class GalleryPhotoAdapter(
         }
 
         /** Устанавливаем иконку лайка в зависимости лайкнут/не лайкнут */
-        private fun setLikeImage(isLike: Boolean) {
+        private fun setLikeImage(isLike: Boolean) =
             if (isLike)
-                binding.likeButton.setImageResource(R.drawable.ic_like)
+                R.drawable.ic_like
             else
-                binding.likeButton.setImageResource(R.drawable.ic_dislike_white)
-        }
+                R.drawable.ic_dislike_white
     }
 }

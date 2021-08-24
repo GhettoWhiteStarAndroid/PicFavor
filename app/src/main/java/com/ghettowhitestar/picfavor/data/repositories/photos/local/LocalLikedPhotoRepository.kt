@@ -15,6 +15,6 @@ class LocalLikedPhotoRepository @Inject constructor(
         likedPhotoDao.insertLikedPhoto(photo)
 
     override fun deleteLikedPhoto(photo: PicsumPhoto) =
-        likedPhotoDao.deleteLikedPhoto(photo)
+        likedPhotoDao.deleteLikedPhoto(photo.id)
 
 }

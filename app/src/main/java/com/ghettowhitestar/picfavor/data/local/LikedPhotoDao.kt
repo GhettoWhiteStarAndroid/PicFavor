@@ -21,6 +21,6 @@ interface LikedPhotoDao {
     fun insertLikedPhoto(likedPhoto: PicsumPhoto)
 
     /**Удаление понравившейся фотографии*/
-    @Delete
-    fun deleteLikedPhoto(likedPhoto: PicsumPhoto)
+    @Query("DELETE FROM PicsumPhoto WHERE id = :id")
+    fun deleteLikedPhoto(id: Long)
 }

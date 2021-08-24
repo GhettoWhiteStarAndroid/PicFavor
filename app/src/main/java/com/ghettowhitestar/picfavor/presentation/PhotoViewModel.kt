@@ -45,28 +45,32 @@ class PhotoViewModel @ViewModelInject constructor(
             val likedPhoto = useCase.getLikedPhoto()
             withContext(Dispatchers.Main) {
                 mutableLikedPhotoList.add(likedPhoto)
-                mutableIsStartNetwork.value = useCase.checkNetworkConnection()
+                checkNetwork()
             }
             loadNextPage()
         }
     }
 
+    fun checkNetwork(){
+        mutableIsStartNetwork.value = useCase.checkNetworkConnection()
+    }
+
     fun changeLikePhoto(photo: PicsumPhoto, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch(Dispatchers.IO) {
             if (photo.isLikedPhoto) {
                 photo.isLikedPhoto = !photo.isLikedPhoto
                 useCase.unlikePhoto(photo)
                 withContext(Dispatchers.Main) {
-                    mutableLikedPhotoList.delete(listOf(photo))
-                    findLikedPhoto(photo,false)
+                    findLikedPhoto(photo,photo.isLikedPhoto)
+                    findPhoto(photo)
                 }
             } else {
                 photo.isLikedPhoto = !photo.isLikedPhoto
                 photo.path = "${photo.id}.jpg"
                 useCase.likePhoto(bitmap, photo)
                 withContext(Dispatchers.Main) {
+                    findLikedPhoto(photo,photo.isLikedPhoto)
                     mutableLikedPhotoList.add(listOf(photo))
-                    findLikedPhoto(photo,true)
                 }
             }
         }
@@ -96,15 +100,17 @@ class PhotoViewModel @ViewModelInject constructor(
             }
         }
     }
-
-    fun findLikedPhoto(photo: PicsumPhoto, isLike: Boolean) {
-        val list = mutableGalleryPhotoList.value?.toMutableList()
-        list?.forEachIndexed { index, item ->
-            if (item.id == photo.id){
-                list[index] = item.copy(isLike)
+    private fun findLikedPhoto(photo: PicsumPhoto, isLiked: Boolean) {
+        for (item: PicsumPhoto in mutableGalleryPhotoList.value ?: listOf()) {
+            if (item.id == photo.id) {
+                item.isLikedPhoto = isLiked
             }
         }
-        mutableGalleryPhotoList.value = list
+        mutableGalleryPhotoList.add(listOf())
     }
 
+    private fun findPhoto(photo: PicsumPhoto) {
+        mutableLikedPhotoList.value?.removeIf { it.id == photo.id }
+        mutableLikedPhotoList.add(listOf())
+    }
 }

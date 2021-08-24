@@ -23,7 +23,7 @@ class LikesFragment : BasePhotoFragment() {
                     else
                         VisibilityStates.Visible
                 )
-                adapter.submitList(items)
+                adapter.updateItems(items)
             }
         }
     }

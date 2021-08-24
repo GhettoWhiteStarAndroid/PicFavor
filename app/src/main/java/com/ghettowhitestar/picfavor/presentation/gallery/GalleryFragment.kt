@@ -25,18 +25,27 @@ class GalleryFragment : BasePhotoFragment() {
 
         buttonRetry.setOnClickListener {
             layoutState(VisibilityStates.Loading)
-            /*viewModel.checkNetworkConnection()*/
+            viewModel.checkNetwork()
         }
         viewModel.isStartNetwork.observe(viewLifecycleOwner, {
-            layoutState(if(it) VisibilityStates.Retry else VisibilityStates.Visible)
+
         })
     }
 
     override fun PhotoViewModel.observe() {
         observe(galleryPhotoList){
             it.let { items ->
-                adapter.submitList(items)
+                adapter.updateItems(items)
                 binding.layoutState(VisibilityStates.Visible)
+            }
+        }
+        observe(isStartNetwork){
+            it.let { items ->
+                binding.layoutState(
+                    if(it)
+                        VisibilityStates.Retry
+                    else
+                        VisibilityStates.Visible)
             }
         }
     }

@@ -13,10 +13,7 @@ import com.ghettowhitestar.picfavor.data.repositories.photos.local.LocalPhotoRep
 import com.ghettowhitestar.picfavor.data.repositories.photos.network.NetworkGalleryPhotoRepository
 import com.ghettowhitestar.picfavor.data.repositories.photos.network.NetworkPhotoRepository
 import com.ghettowhitestar.picfavor.utils.Constants.PAGE_SIZE
-import com.ghettowhitestar.picfavor.utils.add
-import com.ghettowhitestar.picfavor.utils.delete
-import io.reactivex.Single
-import io.reactivex.schedulers.Schedulers
+
 
 
 import javax.inject.Inject
@@ -58,6 +55,6 @@ class PhotoUseCase @Inject constructor(
     }
 
     internal fun unlikePhoto(photo: PicsumPhoto) {
-        fileStorageRepository.deleteImage(photo.path)
+        fileStorageRepository.deleteImage("${photo.id}.jpg")
         localPhotoRepository.deleteLikedPhoto(photo)
     }}
