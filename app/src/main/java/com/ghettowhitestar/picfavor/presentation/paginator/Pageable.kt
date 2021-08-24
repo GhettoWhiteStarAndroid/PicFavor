@@ -3,6 +3,9 @@ package com.ghettowhitestar.picfavor.presentation.paginator
 /** Интерфейс, который должны реализовывать классы, способные на пагинацию */
 
 interface Pageable {
+    /** Размер страницы с данными */
+    val pageSize: Int
+
     /** Есть ли еще данные для подгрузки */
     var hasMore: Boolean
 

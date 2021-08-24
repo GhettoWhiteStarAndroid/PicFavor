@@ -4,8 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ghettowhitestar.picfavor.R
@@ -23,10 +21,9 @@ class GalleryPhotoAdapter(
 ) :
     RecyclerView.Adapter<GalleryPhotoAdapter.PhotoViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
-        val binding = ItemPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return PhotoViewHolder(binding)
-    }
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder =
+        PhotoViewHolder(ItemPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
 
     fun updateItems(items: MutableList<PicsumPhoto>) {
         this.items = items

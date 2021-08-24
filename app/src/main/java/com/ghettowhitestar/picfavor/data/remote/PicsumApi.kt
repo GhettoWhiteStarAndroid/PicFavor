@@ -1,7 +1,6 @@
 package com.ghettowhitestar.picfavor.data.remote
 
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -14,7 +13,7 @@ interface PicsumApi {
      * @param limit кол-во получаемых фотографий на одной странице
      */
     @GET("v2/list")
-   suspend fun getListGalleryPhotos(
+    suspend fun getListGalleryPhotos(
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<PicsumPhoto>

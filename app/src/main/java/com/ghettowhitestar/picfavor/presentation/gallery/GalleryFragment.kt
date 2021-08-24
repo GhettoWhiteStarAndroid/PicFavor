@@ -6,7 +6,6 @@ import com.ghettowhitestar.picfavor.core.BasePhotoFragment
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
 import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 import com.ghettowhitestar.picfavor.presentation.VisibilityStates
-import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
 import com.ghettowhitestar.picfavor.presentation.paginator.PaginationListener
 import com.ghettowhitestar.picfavor.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,18 +17,12 @@ class GalleryFragment : BasePhotoFragment() {
     override fun FragmentLayoutBinding.initView() {
         progressBar.visibility = View.VISIBLE
         textViewError.text = getString(R.string.connectionInternet)
-
-        adapter = GalleryPhotoAdapter{ photo, bitmap -> viewModel.changeLikePhoto(photo, bitmap) }
         recyclerView.addOnScrollListener(PaginationListener(viewModel))
-        recyclerView.adapter = adapter
 
         buttonRetry.setOnClickListener {
             layoutState(VisibilityStates.Loading)
             viewModel.checkNetwork()
         }
-        viewModel.isStartNetwork.observe(viewLifecycleOwner, {
-
-        })
     }
 
     override fun PhotoViewModel.observe() {
@@ -40,9 +33,9 @@ class GalleryFragment : BasePhotoFragment() {
             }
         }
         observe(isStartNetwork){
-            it.let { items ->
+            it.let { isAvailable ->
                 binding.layoutState(
-                    if(it)
+                    if(isAvailable)
                         VisibilityStates.Retry
                     else
                         VisibilityStates.Visible)

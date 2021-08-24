@@ -1,18 +1,13 @@
 package com.ghettowhitestar.picfavor.domain.usecases
 
-import android.annotation.SuppressLint
+
 import android.graphics.Bitmap
-import android.net.ConnectivityManager
-import com.ghettowhitestar.picfavor.data.remote.PicsumApi
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
-import com.ghettowhitestar.picfavor.data.local.LikedPhotoDao
 import com.ghettowhitestar.picfavor.data.repositories.connection.ConnectionRepository
-import com.ghettowhitestar.picfavor.data.repositories.connection.NetworkConnectionRepository
 import com.ghettowhitestar.picfavor.data.repositories.files.FileStorageRepository
 import com.ghettowhitestar.picfavor.data.repositories.photos.local.LocalPhotoRepository
-import com.ghettowhitestar.picfavor.data.repositories.photos.network.NetworkGalleryPhotoRepository
 import com.ghettowhitestar.picfavor.data.repositories.photos.network.NetworkPhotoRepository
-import com.ghettowhitestar.picfavor.utils.Constants.PAGE_SIZE
+
 
 
 
@@ -34,8 +29,8 @@ class PhotoUseCase @Inject constructor(
     fun checkNetworkConnection() = connectionRepository.isNetworkAvailable()
 
 
-    suspend fun getGalleryPhoto(currentPage: Int) =
-        networkPhotoRepository.getGalleryPhotosResult(PAGE_SIZE, currentPage)
+    suspend fun getGalleryPhoto(currentPage: Int,pageSize: Int) =
+        networkPhotoRepository.getGalleryPhotosResult(pageSize, currentPage)
 
 
    fun isGalleryPhotoLiked(listPhoto: List<PicsumPhoto>,listLikedPhoto: List<PicsumPhoto>): List<PicsumPhoto> {

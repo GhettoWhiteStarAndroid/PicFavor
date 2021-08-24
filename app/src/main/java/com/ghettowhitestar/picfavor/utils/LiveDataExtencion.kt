@@ -3,7 +3,6 @@ package com.ghettowhitestar.picfavor.utils
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.ghettowhitestar.picfavor.data.PicsumPhoto
 
 /**
  * Добавляет элемент в список для наблюдения за ним в MutableLiveData

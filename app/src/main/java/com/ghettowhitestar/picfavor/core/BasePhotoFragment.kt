@@ -26,12 +26,14 @@ abstract class BasePhotoFragment : Fragment() {
         return binding.root
     }
 
-    abstract fun FragmentLayoutBinding.initView()
+    open fun FragmentLayoutBinding.initView() {}
 
     abstract fun PhotoViewModel.observe()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        adapter = GalleryPhotoAdapter{ photo, bitmap -> viewModel.changeLikePhoto(photo, bitmap) }
+        binding.recyclerView.adapter = adapter
         binding.initView()
         viewModel.observe()
     }

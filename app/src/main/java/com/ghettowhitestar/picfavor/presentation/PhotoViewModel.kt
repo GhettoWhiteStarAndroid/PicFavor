@@ -11,7 +11,6 @@ import com.ghettowhitestar.picfavor.data.remote.ResultWrapper
 import com.ghettowhitestar.picfavor.presentation.paginator.Pageable
 import com.ghettowhitestar.picfavor.domain.usecases.PhotoUseCase
 import com.ghettowhitestar.picfavor.utils.add
-import com.ghettowhitestar.picfavor.utils.delete
 import kotlinx.coroutines.*
 
 class PhotoViewModel @ViewModelInject constructor(
@@ -21,6 +20,7 @@ class PhotoViewModel @ViewModelInject constructor(
     override var hasMore: Boolean = true
     override var currentPage: Int = 1
     override var isDownloading: Boolean = false
+    override val pageSize: Int = 20
 
     private val mutableIsStartNetwork = MutableLiveData<Boolean>()
     val isStartNetwork: LiveData<Boolean>
@@ -79,7 +79,7 @@ class PhotoViewModel @ViewModelInject constructor(
     override fun loadNextPage() {
         isDownloading = true
         viewModelScope.launch(Dispatchers.IO) {
-            val listPhotos = (useCase.getGalleryPhoto(currentPage))
+            val listPhotos = (useCase.getGalleryPhoto(currentPage,pageSize))
             withContext(Dispatchers.Main) {
                 isDownloading = false
                 when (listPhotos) {
