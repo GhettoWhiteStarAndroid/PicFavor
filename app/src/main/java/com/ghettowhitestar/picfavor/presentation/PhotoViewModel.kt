@@ -52,14 +52,16 @@ class PhotoViewModel @ViewModelInject constructor(
     }
 
     fun changeLikePhoto(photo: PicsumPhoto, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.Default) {
             if (photo.isLikedPhoto) {
+                photo.isLikedPhoto = !photo.isLikedPhoto
                 useCase.unlikePhoto(photo)
                 withContext(Dispatchers.Main) {
                     mutableLikedPhotoList.delete(listOf(photo))
                     findLikedPhoto(photo,false)
                 }
             } else {
+                photo.isLikedPhoto = !photo.isLikedPhoto
                 photo.path = "${photo.id}.jpg"
                 useCase.likePhoto(bitmap, photo)
                 withContext(Dispatchers.Main) {

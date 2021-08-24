@@ -8,15 +8,15 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-class FileStorageRepository @Inject constructor() : FileRepository {
+class FileStorageRepository @Inject constructor(val filePath:String) : FileRepository {
     /**
      * Удаление фотографии из памяти телефона
      * @ path путь к сохраненной фотографии
      */
     override fun deleteImage(path: String) {
+
         val storageDir = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + "/DCIM"
+            filePath
         )
         val imageFile = File(storageDir, path)
         if (imageFile.exists()) {
@@ -27,8 +27,7 @@ class FileStorageRepository @Inject constructor() : FileRepository {
     /** Сохранение фотографии на телефоне */
     override fun saveImage(image: Bitmap, photo: PicsumPhoto) {
         val storageDir = File(
-            Environment.getExternalStorageDirectory()
-                .toString() + "/DCIM"
+            filePath
         )
         var success = true
         if (!storageDir.exists()) {

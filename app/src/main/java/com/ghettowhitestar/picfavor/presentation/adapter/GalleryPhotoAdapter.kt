@@ -27,10 +27,12 @@ class GalleryPhotoAdapter(
             return oldItem == newItem
         }
         override fun areItemsTheSame(oldItem: PicsumPhoto, newItem: PicsumPhoto): Boolean {
-            if(oldItem.id == newItem.id){
-                return (oldItem.isLikedPhoto == newItem.isLikedPhoto)
-            } else
-                return oldItem.id == newItem.id
+            return if( oldItem.id == newItem.id)
+           {
+               oldItem.isLikedPhoto == newItem.isLikedPhoto
+           }else{
+               false
+           }
         }
     }
 
@@ -58,11 +60,10 @@ class GalleryPhotoAdapter(
                     .into(pictureImage)
 
                 textViewUserName.text = photo.author
-
                 setLikeImage(photo.isLikedPhoto)
-
+                pictureImage.tag = photo.downloadUrl
                 likeButton.setOnClickListener {
-                  /*  setLikeImage(!photo.isLikedPhoto)*/
+                 setLikeImage(!photo.isLikedPhoto)
                     val bitmap = (pictureImage.drawable as BitmapDrawable).bitmap
                     listenerLike(photo, bitmap)
                 }

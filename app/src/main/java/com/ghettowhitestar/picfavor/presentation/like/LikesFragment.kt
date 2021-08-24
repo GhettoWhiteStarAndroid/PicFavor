@@ -11,7 +11,6 @@ class LikesFragment : BasePhotoFragment() {
 
     override fun FragmentLayoutBinding.initView() {
         adapter = GalleryPhotoAdapter{ photo, bitmap -> viewModel.changeLikePhoto(photo, bitmap) }
-
         recyclerView.adapter = adapter
     }
 
