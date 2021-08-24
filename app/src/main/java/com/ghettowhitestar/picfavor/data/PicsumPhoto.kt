@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PicsumPhoto(
     @PrimaryKey(autoGenerate = false)
-    var id: String,
+    var id: Int,
     @ColumnInfo(name = "author")
     val author: String,
     @SerializedName("download_url")
@@ -21,3 +21,14 @@ data class PicsumPhoto(
     @ColumnInfo(name = "path")
     var path: String
 ) : Parcelable
+{
+
+    fun copy(isLike: Boolean) =
+        PicsumPhoto(
+            this.id,
+            this.author,
+            this.downloadUrl,
+            isLike,
+            this.path
+        )
+}

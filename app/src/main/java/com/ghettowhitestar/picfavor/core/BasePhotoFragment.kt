@@ -5,14 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.viewbinding.ViewBinding
+import androidx.fragment.app.activityViewModels
 import com.ghettowhitestar.picfavor.databinding.FragmentLayoutBinding
+import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 import com.ghettowhitestar.picfavor.presentation.VisibilityStates
+import com.ghettowhitestar.picfavor.presentation.adapter.GalleryPhotoAdapter
 
-abstract class BaseFragment : Fragment() {
+abstract class BasePhotoFragment : Fragment() {
 
     protected lateinit var binding: FragmentLayoutBinding
-    abstract fun FragmentLayoutBinding.initView()
+    protected val viewModel: PhotoViewModel by activityViewModels()
+    protected lateinit var adapter: GalleryPhotoAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -23,9 +26,14 @@ abstract class BaseFragment : Fragment() {
         return binding.root
     }
 
+    abstract fun FragmentLayoutBinding.initView()
+
+    abstract fun PhotoViewModel.observe()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.initView()
+        viewModel.observe()
     }
 
     fun FragmentLayoutBinding.layoutState(state: VisibilityStates) {
@@ -43,6 +51,7 @@ abstract class BaseFragment : Fragment() {
             VisibilityStates.Visible -> {
                 textViewError.visibility = View.GONE
                 buttonRetry.visibility = View.GONE
+                progressBar.visibility = View.GONE
             }
             VisibilityStates.Empty -> {
                 textViewError.visibility = View.VISIBLE

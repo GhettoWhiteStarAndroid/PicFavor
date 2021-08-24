@@ -1,6 +1,5 @@
 package com.ghettowhitestar.picfavor.presentation
 
-import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
@@ -13,11 +12,7 @@ import com.ghettowhitestar.picfavor.presentation.paginator.Pageable
 import com.ghettowhitestar.picfavor.domain.usecases.PhotoUseCase
 import com.ghettowhitestar.picfavor.utils.add
 import com.ghettowhitestar.picfavor.utils.delete
-import io.reactivex.Single
 import kotlinx.coroutines.*
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
-
 
 class PhotoViewModel @ViewModelInject constructor(
     private val useCase: PhotoUseCase
@@ -39,7 +34,7 @@ class PhotoViewModel @ViewModelInject constructor(
     val likedPhotoList: LiveData<MutableList<PicsumPhoto>>
         get() = mutableLikedPhotoList
 
-  /*  private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO + exceptionHandler*/
+    /*  private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO + exceptionHandler*/
 
     init {
         getLikedPhoto()
@@ -48,9 +43,9 @@ class PhotoViewModel @ViewModelInject constructor(
     private fun getLikedPhoto() {
         viewModelScope.launch(Dispatchers.IO) {
             val likedPhoto = useCase.getLikedPhoto()
-            withContext(Dispatchers.Main){
-            mutableLikedPhotoList.add(likedPhoto)
-            mutableIsStartNetwork.value = useCase.checkNetworkConnection()
+            withContext(Dispatchers.Main) {
+                mutableLikedPhotoList.add(likedPhoto)
+                mutableIsStartNetwork.value = useCase.checkNetworkConnection()
             }
             loadNextPage()
         }
@@ -62,14 +57,14 @@ class PhotoViewModel @ViewModelInject constructor(
                 useCase.unlikePhoto(photo)
                 withContext(Dispatchers.Main) {
                     mutableLikedPhotoList.delete(listOf(photo))
-                    findLikedPhoto(photo)
+                    findLikedPhoto(photo,false)
                 }
             } else {
-                photo.isLikedPhoto = true
-                photo.path = photo.id + ".jpg"
+                photo.path = "${photo.id}.jpg"
                 useCase.likePhoto(bitmap, photo)
-                withContext(Dispatchers.Main){
-                mutableLikedPhotoList.add(listOf(photo))
+                withContext(Dispatchers.Main) {
+                    mutableLikedPhotoList.add(listOf(photo))
+                    findLikedPhoto(photo,true)
                 }
             }
         }
@@ -79,28 +74,35 @@ class PhotoViewModel @ViewModelInject constructor(
         isDownloading = true
         viewModelScope.launch(Dispatchers.IO) {
             val listPhotos = (useCase.getGalleryPhoto(currentPage))
-            withContext(Dispatchers.Main){
-            isDownloading = false
-            when (listPhotos) {
-                is ResultWrapper.NetworkError ->{}
-                is ResultWrapper.GenericError ->{}
-                is ResultWrapper.Success<List<PicsumPhoto>> -> {
-                    currentPage++
-                    mutableGalleryPhotoList.add(useCase.isGalleryPhotoLiked(listPhotos.value,likedPhotoList.value?: listOf()))
+            withContext(Dispatchers.Main) {
+                isDownloading = false
+                when (listPhotos) {
+                    is ResultWrapper.NetworkError -> {
+                    }
+                    is ResultWrapper.GenericError -> {
+                    }
+                    is ResultWrapper.Success<List<PicsumPhoto>> -> {
+                        currentPage++
+                        mutableGalleryPhotoList.add(
+                            useCase.isGalleryPhotoLiked(
+                                listPhotos.value,
+                                likedPhotoList.value ?: listOf()
+                            )
+                        )
+                    }
                 }
             }
         }
-        }
-
     }
 
-    fun findLikedPhoto(photo: PicsumPhoto) {
-        for (item: PicsumPhoto in mutableGalleryPhotoList.value ?: listOf()) {
-            if (item.id == photo.id) {
-                item.isLikedPhoto = false
+    fun findLikedPhoto(photo: PicsumPhoto, isLike: Boolean) {
+        val list = mutableGalleryPhotoList.value?.toMutableList()
+        list?.forEachIndexed { index, item ->
+            if (item.id == photo.id){
+                list[index] = item.copy(isLike)
             }
         }
-        mutableGalleryPhotoList.add(listOf())
+        mutableGalleryPhotoList.value = list
     }
 
 }

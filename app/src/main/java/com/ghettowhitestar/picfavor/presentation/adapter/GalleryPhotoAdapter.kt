@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.ghettowhitestar.picfavor.R
@@ -17,37 +18,32 @@ import com.ghettowhitestar.picfavor.databinding.ItemPhotoBinding
  * @property listenerLike лямбда на метод в viewmodel при изменении лайка
  */
 class GalleryPhotoAdapter(
-    private var items: List<PicsumPhoto> = mutableListOf(),
     private val listenerLike: (PicsumPhoto, Bitmap) -> Unit
 ) :
-    RecyclerView.Adapter<GalleryPhotoAdapter.PhotoViewHolder>() {
-    private var diffUtilCallback: PhotoComparator? = null
+    ListAdapter<PicsumPhoto, GalleryPhotoAdapter.PhotoViewHolder>(PhotoDiff) {
+
+    object PhotoDiff: DiffUtil.ItemCallback<PicsumPhoto>(){
+        override fun areContentsTheSame(oldItem: PicsumPhoto, newItem: PicsumPhoto): Boolean {
+            return oldItem == newItem
+        }
+        override fun areItemsTheSame(oldItem: PicsumPhoto, newItem: PicsumPhoto): Boolean {
+            if(oldItem.id == newItem.id){
+                return (oldItem.isLikedPhoto == newItem.isLikedPhoto)
+            } else
+                return oldItem.id == newItem.id
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
         val binding = ItemPhotoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PhotoViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-        holder.bind(items[position], listenerLike)
+        holder.bind(currentList[position], listenerLike)
     }
 
-    /**
-     * Обновляем элементы в списке
-     * @property items новый список с фотографиями
-     */
-    fun updateItems(items: MutableList<PicsumPhoto>) {
-         diffUtilCallback = PhotoComparator(this.items,items)
-          diffUtilCallback?.let {
-              val diffResult = DiffUtil.calculateDiff(it)
-              this.items = mutableListOf()
-              this.items = items
-              diffResult.dispatchUpdatesTo(this)
-          }
-        this.items = items
-        notifyDataSetChanged()
-    }
-
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount(): Int = currentList.size
 
     class PhotoViewHolder(private val binding: ItemPhotoBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -66,7 +62,7 @@ class GalleryPhotoAdapter(
                 setLikeImage(photo.isLikedPhoto)
 
                 likeButton.setOnClickListener {
-                    setLikeImage(!photo.isLikedPhoto)
+                  /*  setLikeImage(!photo.isLikedPhoto)*/
                     val bitmap = (pictureImage.drawable as BitmapDrawable).bitmap
                     listenerLike(photo, bitmap)
                 }
