@@ -8,5 +8,5 @@ import javax.inject.Singleton
 class NetworkConnectionRepository @Inject constructor (
     private val connectivityManager: ConnectivityManager
     ) : ConnectionRepository {
-    override fun isNetworkAvailable() = connectivityManager.activeNetwork == null
+    override fun isNetworkAvailable() = connectivityManager.activeNetwork != null
 }

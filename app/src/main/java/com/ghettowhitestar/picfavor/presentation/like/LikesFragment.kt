@@ -4,6 +4,7 @@ import com.ghettowhitestar.picfavor.core.BasePhotoFragment
 import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 import com.ghettowhitestar.picfavor.presentation.VisibilityStates
 import com.ghettowhitestar.picfavor.utils.observe
+import com.ghettowhitestar.picfavor.utils.toast
 
 class LikesFragment : BasePhotoFragment() {
 
@@ -17,6 +18,11 @@ class LikesFragment : BasePhotoFragment() {
                         VisibilityStates.Visible
                 )
                 adapter.updateItems(items)
+            }
+        }
+        observe(toastMessage) {
+            it.let { message ->
+                context?.toast(message)
             }
         }
     }

@@ -10,7 +10,7 @@ object NetworkHelper {
             ResultWrapper.Success(apiCall.invoke())
         } catch (throwable: Throwable) {
             when (throwable) {
-                is IOException -> ResultWrapper.NetworkError
+                is IOException -> ResultWrapper.NetworkError()
                 is HttpException -> {
                     val code = throwable.code()
                     val errorResponse = throwable.message()

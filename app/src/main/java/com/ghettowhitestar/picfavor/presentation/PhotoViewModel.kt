@@ -8,13 +8,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
 import com.ghettowhitestar.picfavor.data.remote.ResultWrapper
+import com.ghettowhitestar.picfavor.data.remote.ResultWrapper.*
 import com.ghettowhitestar.picfavor.presentation.paginator.Pageable
 import com.ghettowhitestar.picfavor.domain.usecases.PhotoUseCase
 import com.ghettowhitestar.picfavor.utils.add
 import kotlinx.coroutines.*
 
+
 class PhotoViewModel @ViewModelInject constructor(
-    private val useCase: PhotoUseCase
+    private val useCase: PhotoUseCase,
+
 ) : ViewModel(), Pageable {
 
     override var hasMore: Boolean = true
@@ -22,9 +25,17 @@ class PhotoViewModel @ViewModelInject constructor(
     override var isDownloading: Boolean = false
     override val pageSize: Int = 20
 
+    private val dispatcherIO: CoroutineDispatcher = Dispatchers.IO
+    private val dispatcherMain: CoroutineDispatcher = Dispatchers.Main
+
     private val mutableIsStartNetwork = MutableLiveData<Boolean>()
     val isStartNetwork: LiveData<Boolean>
         get() = mutableIsStartNetwork
+
+    private val mutableToastMessage = MutableLiveData<String>()
+    val toastMessage: LiveData<String>
+        get() = mutableToastMessage
+
 
     private val mutableGalleryPhotoList = MutableLiveData<MutableList<PicsumPhoto>>()
     val galleryPhotoList: LiveData<MutableList<PicsumPhoto>>
@@ -34,60 +45,41 @@ class PhotoViewModel @ViewModelInject constructor(
     val likedPhotoList: LiveData<MutableList<PicsumPhoto>>
         get() = mutableLikedPhotoList
 
-    /*  private val defaultDispatcher: CoroutineDispatcher = Dispatchers.IO + exceptionHandler*/
-
     init {
         getLikedPhoto()
     }
 
     private fun getLikedPhoto() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatcherIO) {
             val likedPhoto = useCase.getLikedPhoto()
             withContext(Dispatchers.Main) {
                 mutableLikedPhotoList.add(likedPhoto)
                 checkNetwork()
             }
-            loadNextPage()
         }
     }
 
-    fun checkNetwork(){
+    fun checkNetwork() {
         mutableIsStartNetwork.value = useCase.checkNetworkConnection()
-    }
-
-    fun changeLikePhoto(photo: PicsumPhoto, bitmap: Bitmap) {
-        viewModelScope.launch(Dispatchers.IO) {
-            if (photo.isLikedPhoto) {
-                photo.isLikedPhoto = !photo.isLikedPhoto
-                useCase.unlikePhoto(photo)
-                withContext(Dispatchers.Main) {
-                    findLikedPhoto(photo,photo.isLikedPhoto)
-                    findPhoto(photo)
-                }
-            } else {
-                photo.isLikedPhoto = !photo.isLikedPhoto
-                photo.path = "${photo.id}.jpg"
-                useCase.likePhoto(bitmap, photo)
-                withContext(Dispatchers.Main) {
-                    findLikedPhoto(photo,photo.isLikedPhoto)
-                    mutableLikedPhotoList.add(listOf(photo))
-                }
-            }
+        if (mutableIsStartNetwork.value == true) {
+            loadNextPage()
         }
     }
 
     override fun loadNextPage() {
         isDownloading = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val listPhotos = (useCase.getGalleryPhoto(currentPage,pageSize))
-            withContext(Dispatchers.Main) {
+        viewModelScope.launch(dispatcherIO) {
+            val listPhotos = (useCase.getGalleryPhoto(currentPage, pageSize))
+            withContext(dispatcherMain) {
                 isDownloading = false
                 when (listPhotos) {
-                    is ResultWrapper.NetworkError -> {
+                    is NetworkError -> {
+                        mutableToastMessage.value = listPhotos.errorMessage
                     }
-                    is ResultWrapper.GenericError -> {
+                    is GenericError -> {
+                        mutableToastMessage.value = "${listPhotos.code} : ${listPhotos.errorMessage}"
                     }
-                    is ResultWrapper.Success<List<PicsumPhoto>> -> {
+                    is Success<List<PicsumPhoto>> -> {
                         currentPage++
                         mutableGalleryPhotoList.add(
                             useCase.isGalleryPhotoLiked(
@@ -100,16 +92,37 @@ class PhotoViewModel @ViewModelInject constructor(
             }
         }
     }
+
+    fun changeLikePhoto(photo: PicsumPhoto, bitmap: Bitmap) {
+        viewModelScope.launch(dispatcherIO) {
+            photo.isLikedPhoto = !photo.isLikedPhoto
+            if (photo.isLikedPhoto) {
+                photo.path = "${photo.id}.jpg"
+                useCase.likePhoto(bitmap, photo)
+                withContext(dispatcherMain) {
+                    findLikedPhoto(photo, photo.isLikedPhoto)
+                }
+            } else {
+                useCase.unlikePhoto(photo)
+                withContext(dispatcherMain) {
+                    findLikedPhoto(photo, photo.isLikedPhoto)
+                    removeLikedPhoto(photo)
+                }
+            }
+        }
+    }
+
     private fun findLikedPhoto(photo: PicsumPhoto, isLiked: Boolean) {
-        for (item: PicsumPhoto in mutableGalleryPhotoList.value ?: listOf()) {
+        mutableGalleryPhotoList.value?.forEach { item ->
             if (item.id == photo.id) {
                 item.isLikedPhoto = isLiked
             }
         }
         mutableGalleryPhotoList.add(listOf())
+        mutableLikedPhotoList.add(listOf(photo))
     }
 
-    private fun findPhoto(photo: PicsumPhoto) {
+    private fun removeLikedPhoto(photo: PicsumPhoto) {
         mutableLikedPhotoList.value?.removeIf { it.id == photo.id }
         mutableLikedPhotoList.add(listOf())
     }

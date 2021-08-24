@@ -8,6 +8,7 @@ import com.ghettowhitestar.picfavor.presentation.PhotoViewModel
 import com.ghettowhitestar.picfavor.presentation.VisibilityStates
 import com.ghettowhitestar.picfavor.presentation.paginator.PaginationListener
 import com.ghettowhitestar.picfavor.utils.observe
+import com.ghettowhitestar.picfavor.utils.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 /** Фрагмент отвечающий за отображение случайных фотографий */
@@ -26,21 +27,26 @@ class GalleryFragment : BasePhotoFragment() {
     }
 
     override fun PhotoViewModel.observe() {
-        observe(galleryPhotoList){
+        observe(galleryPhotoList) {
             it.let { items ->
                 adapter.updateItems(items)
                 binding.layoutState(VisibilityStates.Visible)
             }
         }
-        observe(isStartNetwork){
+        observe(isStartNetwork) {
             it.let { isAvailable ->
                 binding.layoutState(
-                    if(isAvailable)
-                        VisibilityStates.Retry
+                    if (isAvailable)
+                        VisibilityStates.Visible
                     else
-                        VisibilityStates.Visible)
+                        VisibilityStates.Retry
+                )
+            }
+        }
+        observe(toastMessage) {
+            it.let { message ->
+                context?.toast(message)
             }
         }
     }
-
 }
