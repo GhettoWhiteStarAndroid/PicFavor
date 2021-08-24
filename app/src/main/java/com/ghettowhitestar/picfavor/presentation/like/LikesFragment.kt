@@ -15,7 +15,7 @@ class LikesFragment : BasePhotoFragment() {
                     if (it.isEmpty())
                         VisibilityStates.Empty
                     else
-                        VisibilityStates.Visible
+                        VisibilityStates.Success
                 )
                 adapter.updateItems(items)
             }

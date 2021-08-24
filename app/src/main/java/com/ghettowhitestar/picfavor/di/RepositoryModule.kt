@@ -1,7 +1,5 @@
 package com.ghettowhitestar.picfavor.di
 
-import com.ghettowhitestar.picfavor.data.repositories.connection.ConnectionRepository
-import com.ghettowhitestar.picfavor.data.repositories.connection.NetworkConnectionRepository
 import com.ghettowhitestar.picfavor.data.repositories.files.FileRepository
 import com.ghettowhitestar.picfavor.data.repositories.files.FileStorageRepository
 import com.ghettowhitestar.picfavor.data.repositories.photos.local.LocalLikedPhotoRepository
@@ -16,9 +14,6 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
-
-    @Binds
-    abstract fun bindsConnectionRepository(networkConnectionRepository: NetworkConnectionRepository): ConnectionRepository
 
     @Binds
     abstract fun bindFileRepository(fileStorageRepository: FileStorageRepository): FileRepository

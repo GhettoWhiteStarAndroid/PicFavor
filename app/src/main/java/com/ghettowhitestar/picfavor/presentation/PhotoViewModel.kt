@@ -47,21 +47,21 @@ class PhotoViewModel @ViewModelInject constructor(
 
     init {
         getLikedPhoto()
+        checkNetwork()
     }
 
     private fun getLikedPhoto() {
         viewModelScope.launch(dispatcherIO) {
             val likedPhoto = useCase.getLikedPhoto()
-            withContext(Dispatchers.Main) {
+            withContext(dispatcherMain) {
                 mutableLikedPhotoList.add(likedPhoto)
-                checkNetwork()
             }
         }
     }
 
     fun checkNetwork() {
         mutableIsStartNetwork.value = useCase.checkNetworkConnection()
-        if (mutableIsStartNetwork.value == true) {
+        if (mutableIsStartNetwork.value?: false) {
             loadNextPage()
         }
     }

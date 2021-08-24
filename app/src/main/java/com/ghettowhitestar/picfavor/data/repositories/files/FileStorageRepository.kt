@@ -1,6 +1,7 @@
 package com.ghettowhitestar.picfavor.data.repositories.files
 
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
 import android.os.Environment
 import com.ghettowhitestar.picfavor.data.PicsumPhoto
 import java.io.File
@@ -8,7 +9,8 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import javax.inject.Inject
 
-class FileStorageRepository @Inject constructor(val filePath:String) : FileRepository {
+class FileStorageRepository @Inject constructor(private val filePath:String) : FileRepository {
+
     /**
      * Удаление фотографии из памяти телефона
      * @ path путь к сохраненной фотографии

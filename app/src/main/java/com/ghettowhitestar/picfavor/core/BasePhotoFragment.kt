@@ -45,12 +45,12 @@ abstract class BasePhotoFragment : Fragment() {
                 textViewError.visibility = View.GONE
                 buttonRetry.visibility = View.GONE
             }
-            VisibilityStates.Retry -> {
+            VisibilityStates.Fail -> {
                 progressBar.visibility = View.GONE
                 textViewError.visibility = View.VISIBLE
                 buttonRetry.visibility = View.VISIBLE
             }
-            VisibilityStates.Visible -> {
+            VisibilityStates.Success -> {
                 textViewError.visibility = View.GONE
                 buttonRetry.visibility = View.GONE
                 progressBar.visibility = View.GONE

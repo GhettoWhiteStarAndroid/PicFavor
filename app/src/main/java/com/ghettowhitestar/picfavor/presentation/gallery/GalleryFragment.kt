@@ -30,16 +30,16 @@ class GalleryFragment : BasePhotoFragment() {
         observe(galleryPhotoList) {
             it.let { items ->
                 adapter.updateItems(items)
-                binding.layoutState(VisibilityStates.Visible)
+                binding.layoutState(VisibilityStates.Success)
             }
         }
         observe(isStartNetwork) {
             it.let { isAvailable ->
                 binding.layoutState(
                     if (isAvailable)
-                        VisibilityStates.Visible
+                        VisibilityStates.Success
                     else
-                        VisibilityStates.Retry
+                        VisibilityStates.Fail
                 )
             }
         }
